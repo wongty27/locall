@@ -12,3 +12,8 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+
+tsconfig.webview.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.playwright-mcp/**

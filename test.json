@@ -1,0 +1,4621 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Chat Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/booking_handoff": {
+      "post": {
+        "summary": "Booking Handoff",
+        "description": "EPIC-3 on-tap Buy Ticket: fetch a FRESH SelectTrip hand-off (mPay deep link +\nbrowser-safe web URL) for one train. Deliberately out of the chat answer path —\nthe SelectTrip chain costs 10-20s upstream and only ticket buyers should pay it.",
+        "operationId": "booking_handoff_api_v1_booking_handoff_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingHandoffRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingHandoffResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ktmb_chat": {
+      "post": {
+        "summary": "Ktmb Chat",
+        "operationId": "ktmb_chat_api_v1_ktmb_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KtmbChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KtmbChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ktmb_chat/sessions": {
+      "get": {
+        "summary": "List Ktmb Sessions",
+        "operationId": "list_ktmb_sessions_api_v1_ktmb_chat_sessions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/KtmbSessionOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Ktmb Sessions Api V1 Ktmb Chat Sessions Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ktmb_chat/sessions/{session_id}/messages": {
+      "get": {
+        "summary": "Get Ktmb Session Messages",
+        "operationId": "get_ktmb_session_messages_api_v1_ktmb_chat_sessions__session_id__messages_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/KtmbMessageOut"
+                  },
+                  "title": "Response Get Ktmb Session Messages Api V1 Ktmb Chat Sessions  Session Id  Messages Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ktmb_chat/sessions/{session_id}": {
+      "delete": {
+        "summary": "Delete Ktmb Session",
+        "operationId": "delete_ktmb_session_api_v1_ktmb_chat_sessions__session_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/whatsapp/webhook": {
+      "get": {
+        "summary": "Whatsapp Verify",
+        "description": "Some providers do a GET verification handshake; 360dialog usually handles Meta\nverification itself, but echo hub.challenge if present.",
+        "operationId": "whatsapp_verify_api_v1_whatsapp_webhook_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Whatsapp Webhook",
+        "operationId": "whatsapp_webhook_api_v1_whatsapp_webhook_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Whatsapp Webhook Api V1 Whatsapp Webhook Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ktmb/chat": {
+      "post": {
+        "tags": [
+          "KTMB Chat RAGFLOW"
+        ],
+        "summary": "Ktmb Chat V2",
+        "operationId": "ktmb_chat_v2_api_v1_ktmb_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KtmbChatV2Request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KtmbChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/assistant/chat": {
+      "post": {
+        "tags": [
+          "Assistant"
+        ],
+        "summary": "Assistant Chat",
+        "description": "Linear multi-tenant assistant: guardrails → RAG → answer (± MCP tools).",
+        "operationId": "assistant_chat_api_v1_assistant_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/supervisor/chat": {
+      "post": {
+        "tags": [
+          "Supervisor"
+        ],
+        "summary": "Supervisor Chat",
+        "description": "Multi-agent supervisor: guardrails → supervisor ⇄ rag|answer → finish.",
+        "operationId": "supervisor_chat_api_v1_supervisor_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupervisorChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupervisorChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ktmb-audio-poc/analyse": {
+      "post": {
+        "tags": [
+          "KTMB Audio POC"
+        ],
+        "summary": "Analyse Ktmb Audio",
+        "operationId": "analyse_ktmb_audio_api_v1_ktmb_audio_poc_analyse_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyse_ktmb_audio_api_v1_ktmb_audio_poc_analyse_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioAnalysisResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Request Entity Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KTMBAudioErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/upload": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Upload a document",
+        "description": "Upload a single local document to the specified RAGFlow dataset.",
+        "operationId": "upload_document_api_v1_ragflow_datasets__dataset_id__documents_upload_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_document_api_v1_ragflow_datasets__dataset_id__documents_upload_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/config": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Update Document Parser Config",
+        "operationId": "update_document_parser_config_api_v1_ragflow_datasets__dataset_id__documents__document_id__config_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentParserConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDocumentParserConfigResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/metadata": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Update document metadata",
+        "description": "Synchronizes the document metadata to RAGFlow. The provided meta_fields object is treated as the complete metadata state and replaces the existing RAGFlow metadata. This endpoint does not trigger document parsing.",
+        "operationId": "update_document_metadata_api_v1_ragflow_datasets__dataset_id__documents__document_id__metadata_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentMetadataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDocumentMetadataResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/parse": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Parse document",
+        "description": "Triggers parsing for a single document using the RAGFlow built-in chunking pipeline.",
+        "operationId": "parse_document_api_v1_ragflow_datasets__dataset_id__documents__document_id__parse_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParseDocumentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/parse-status": {
+      "get": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Get document parse status",
+        "description": "Returns the current RAGFlow parsing status for a single document.",
+        "operationId": "get_document_parse_status_api_v1_ragflow_datasets__dataset_id__documents__document_id__parse_status_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentParseStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}": {
+      "get": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Get document",
+        "description": "Returns the full RAGFlow document information for a single document, including metadata, parser configuration, parse status, and document details.",
+        "operationId": "get_document_api_v1_ragflow_datasets__dataset_id__documents__document_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Delete document",
+        "description": "Deletes a single document from the specified RAGFlow dataset. This permanently removes the document and its associated indexed data.",
+        "operationId": "delete_document_api_v1_ragflow_datasets__dataset_id__documents__document_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDocumentResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents": {
+      "get": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "List documents",
+        "description": "Lists documents in a RAGFlow dataset. The basic request only requires the dataset ID and supports pagination with page and page_size. See the query parameters for additional optional filters.",
+        "operationId": "list_documents_api_v1_ragflow_datasets__dataset_id__documents_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number.",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum number of documents per page.",
+              "default": 30,
+              "title": "Page Size"
+            },
+            "description": "Maximum number of documents per page."
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "create_time",
+                "update_time"
+              ],
+              "type": "string",
+              "description": "Field used to sort documents.",
+              "default": "create_time",
+              "title": "Orderby"
+            },
+            "description": "Field used to sort documents."
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Sort results in descending order.",
+              "default": true,
+              "title": "Desc"
+            },
+            "description": "Sort results in descending order."
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Match document titles by keyword.",
+              "title": "Keywords"
+            },
+            "description": "Match document titles by keyword."
+          },
+          {
+            "name": "document_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by exact document ID.",
+              "title": "Document Id"
+            },
+            "description": "Filter by exact document ID."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by document name.",
+              "title": "Name"
+            },
+            "description": "Filter by document name."
+          },
+          {
+            "name": "create_time_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Unix timestamp lower bound. 0 disables the filter.",
+              "default": 0,
+              "title": "Create Time From"
+            },
+            "description": "Unix timestamp lower bound. 0 disables the filter."
+          },
+          {
+            "name": "create_time_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Unix timestamp upper bound. 0 disables the filter.",
+              "default": 0,
+              "title": "Create Time To"
+            },
+            "description": "Unix timestamp upper bound. 0 disables the filter."
+          },
+          {
+            "name": "suffix",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by file suffix, e.g. pdf, txt, docx.",
+              "title": "Suffix"
+            },
+            "description": "Filter by file suffix, e.g. pdf, txt, docx."
+          },
+          {
+            "name": "run",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by parsing status, e.g. UNSTART, RUNNING, DONE, FAIL or numeric equivalents.",
+              "title": "Run"
+            },
+            "description": "Filter by parsing status, e.g. UNSTART, RUNNING, DONE, FAIL or numeric equivalents."
+          },
+          {
+            "name": "metadata_condition",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional metadata filter as a JSON string using RAGFlow's metadata_condition format.",
+              "title": "Metadata Condition"
+            },
+            "description": "Optional metadata filter as a JSON string using RAGFlow's metadata_condition format."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/activate": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Enable or disable document",
+        "description": "Enables or disables a document for retrieval/search in RAGFlow. This endpoint does not trigger document parsing.When the return 'status' is '1', it means the document is enabled, and when it is '0', it means the document is disabled.",
+        "operationId": "update_document_activation_api_v1_ragflow_datasets__dataset_id__documents__document_id__activate_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentActivationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDocumentActivationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets": {
+      "get": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "List datasets",
+        "description": "Lists RAGFlow datasets with pagination and optional filtering. Parsing status counts can be included for each dataset.",
+        "operationId": "list_datasets_api_v1_ragflow_datasets_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number.",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Number of datasets per page.",
+              "default": 30,
+              "title": "Page Size"
+            },
+            "description": "Number of datasets per page."
+          },
+          {
+            "name": "orderby",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "create_time",
+                "update_time"
+              ],
+              "type": "string",
+              "description": "Field used to sort datasets.",
+              "default": "create_time",
+              "title": "Orderby"
+            },
+            "description": "Field used to sort datasets."
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Sort in descending order.",
+              "default": true,
+              "title": "Desc"
+            },
+            "description": "Sort in descending order."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter datasets by name.",
+              "title": "Name"
+            },
+            "description": "Filter datasets by name."
+          },
+          {
+            "name": "dataset_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by exact dataset ID.",
+              "title": "Dataset Id"
+            },
+            "description": "Filter by exact dataset ID."
+          },
+          {
+            "name": "include_parsing_status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Include document parsing status counts such as running_count, done_count, and fail_count.",
+              "default": false,
+              "title": "Include Parsing Status"
+            },
+            "description": "Include document parsing status counts such as running_count, done_count, and fail_count."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListDatasetsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Create dataset",
+        "description": "Creates a RAGFlow dataset. The example below shows the minimum recommended request using only `name` and `description`. See the request schema for additional optional fields.",
+        "operationId": "create_dataset_api_v1_ragflow_datasets_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDatasetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/retrieval": {
+      "post": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Retrieve chunks",
+        "description": "Retrieves relevant chunks from one or more RAGFlow datasets. This endpoint returns the RAGFlow retrieval result without application-specific post-processing.",
+        "operationId": "retrieve_chunks_api_v1_ragflow_retrieval_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetrieveChunksRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}/documents/{document_id}/chunks": {
+      "get": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "List document chunks",
+        "description": "Lists chunks for a specific document in RAGFlow. Supports optional keyword filtering, pagination, and filtering by chunk ID.",
+        "operationId": "list_document_chunks_api_v1_ragflow_datasets__dataset_id__documents__document_id__chunks_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Keywords used to match chunk content.",
+              "title": "Keywords"
+            },
+            "description": "Keywords used to match chunk content."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number.",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Maximum number of chunks per page.",
+              "default": 30,
+              "title": "Page Size"
+            },
+            "description": "Maximum number of chunks per page."
+          },
+          {
+            "name": "chunk_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional chunk ID to retrieve.",
+              "title": "Chunk Id"
+            },
+            "description": "Optional chunk ID to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ragflow/datasets/{dataset_id}": {
+      "put": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Update dataset",
+        "description": "Updates configuration fields for an existing RAGFlow dataset. Only fields included in the request are forwarded. See the request schema for all supported optional fields.",
+        "operationId": "update_dataset_api_v1_ragflow_datasets__dataset_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDatasetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "RAGFlow"
+        ],
+        "summary": "Delete dataset",
+        "description": "Deletes a single RAGFlow dataset. This endpoint does not support bulk deletion or delete_all.",
+        "operationId": "delete_dataset_api_v1_ragflow_datasets__dataset_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/langfuse/metrics": {
+      "get": {
+        "tags": [
+          "Langfuse"
+        ],
+        "summary": "Get Metrics",
+        "operationId": "get_metrics_api_v1_langfuse_metrics_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Langfuse metrics query as a JSON string. Required by Langfuse; validation is handled upstream.",
+              "title": "Query"
+            },
+            "description": "Langfuse metrics query as a JSON string. Required by Langfuse; validation is handled upstream."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssistantChatRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "trace_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content"
+        ],
+        "title": "AssistantChatRequest"
+      },
+      "AssistantChatResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "debug_steps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Debug Steps"
+          },
+          "retrieved_docs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retrieved Docs"
+          },
+          "used_tools": {
+            "type": "boolean",
+            "title": "Used Tools",
+            "default": false
+          },
+          "blocked": {
+            "type": "boolean",
+            "title": "Blocked",
+            "default": false
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content",
+          "tenant_id"
+        ],
+        "title": "AssistantChatResponse"
+      },
+      "Body_analyse_ktmb_audio_api_v1_ktmb_audio_poc_analyse_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_analyse_ktmb_audio_api_v1_ktmb_audio_poc_analyse_post"
+      },
+      "Body_upload_document_api_v1_ragflow_datasets__dataset_id__documents_upload_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_document_api_v1_ragflow_datasets__dataset_id__documents_upload_post"
+      },
+      "BookingHandoffRequest": {
+        "properties": {
+          "train_no": {
+            "type": "string",
+            "title": "Train No"
+          },
+          "from_station": {
+            "type": "string",
+            "title": "From Station"
+          },
+          "to_station": {
+            "type": "string",
+            "title": "To Station"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "train_no",
+          "from_station",
+          "to_station",
+          "date"
+        ],
+        "title": "BookingHandoffRequest",
+        "description": "EPIC-3 on-tap Buy Ticket: identify one train on one route/date."
+      },
+      "BookingHandoffResponse": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok",
+            "default": true
+          },
+          "train_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train No"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "mpay_deeplink": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mpay Deeplink"
+          },
+          "webview_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webview Url"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "title": "BookingHandoffResponse",
+        "description": "Fresh SelectTrip hand-off: mPay deep link (in-app buy) + browser-safe web URL."
+      },
+      "CreateDatasetRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Name",
+            "description": "Unique dataset name.",
+            "examples": [
+              "KTMB Knowledge Base"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 65535,
+            "title": "Description",
+            "description": "Brief description of the dataset.",
+            "examples": [
+              "Knowledge base for KTMB documents."
+            ]
+          },
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 65535
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Model"
+          },
+          "permission": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "me",
+                  "team"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission"
+          },
+          "chunk_method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "naive",
+                  "manual",
+                  "qa",
+                  "table",
+                  "paper",
+                  "book",
+                  "laws",
+                  "presentation",
+                  "picture",
+                  "one",
+                  "email"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Method"
+          },
+          "parser_config": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parser Config"
+          },
+          "parse_type": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parse Type"
+          },
+          "pipeline_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{32}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pipeline Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description"
+        ],
+        "title": "CreateDatasetRequest",
+        "examples": [
+          {
+            "description": "Knowledge base for KTMB documents.",
+            "name": "KTMB Knowledge Base"
+          }
+        ]
+      },
+      "CrmEscalation": {
+        "properties": {
+          "ticket_no": {
+            "type": "string",
+            "title": "Ticket No"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Priority"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "next_action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Action"
+          },
+          "expected_response": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Response"
+          },
+          "chat_history_attached": {
+            "type": "boolean",
+            "title": "Chat History Attached",
+            "default": true
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ticket_no",
+          "priority",
+          "status"
+        ],
+        "title": "CrmEscalation",
+        "description": "A ticket created by escalating to CRM (mock). Rendered as a card."
+      },
+      "DatasetListItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "document_count": {
+            "type": "integer",
+            "title": "Document Count",
+            "default": 0
+          },
+          "chunk_count": {
+            "type": "integer",
+            "title": "Chunk Count",
+            "default": 0
+          },
+          "token_num": {
+            "type": "integer",
+            "title": "Token Num",
+            "default": 0
+          },
+          "chunk_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Method"
+          },
+          "parser_config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parser Config"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "create_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Create Date"
+          },
+          "create_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Create Time"
+          },
+          "update_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Update Date"
+          },
+          "update_time": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Update Time"
+          },
+          "unstart_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unstart Count"
+          },
+          "running_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Running Count"
+          },
+          "cancel_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cancel Count"
+          },
+          "done_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done Count"
+          },
+          "fail_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fail Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "DatasetListItem"
+      },
+      "DelayItem": {
+        "properties": {
+          "line": {
+            "type": "string",
+            "title": "Line"
+          },
+          "service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service"
+          },
+          "train_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train No"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "delay_minutes": {
+            "type": "integer",
+            "title": "Delay Minutes",
+            "default": 0
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "line",
+          "status"
+        ],
+        "title": "DelayItem",
+        "description": "One service's delay status (mock/sample)."
+      },
+      "DeleteDocumentResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "DeleteDocumentResponse"
+      },
+      "DocumentParseStatusResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "run": {
+            "type": "string",
+            "title": "Run"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "progress_msg": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Msg"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "title": "Chunk Count"
+          },
+          "token_count": {
+            "type": "integer",
+            "title": "Token Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "dataset_id",
+          "run",
+          "progress",
+          "chunk_count",
+          "token_count"
+        ],
+        "title": "DocumentParseStatusResponse"
+      },
+      "DocumentParserConfigData": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "chunk_method": {
+            "type": "string",
+            "title": "Chunk Method"
+          },
+          "parser_config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parser Config"
+          },
+          "chunk_count": {
+            "type": "integer",
+            "title": "Chunk Count"
+          },
+          "token_count": {
+            "type": "integer",
+            "title": "Token Count"
+          },
+          "run": {
+            "type": "string",
+            "title": "Run"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "update_date": {
+            "type": "string",
+            "title": "Update Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "dataset_id",
+          "name",
+          "chunk_method",
+          "parser_config",
+          "chunk_count",
+          "token_count",
+          "run",
+          "progress",
+          "update_date"
+        ],
+        "title": "DocumentParserConfigData"
+      },
+      "GroundedTrain": {
+        "properties": {
+          "from_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Name"
+          },
+          "to_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Name"
+          },
+          "service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service"
+          },
+          "train_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train No"
+          },
+          "depart": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depart"
+          },
+          "arrive": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrive"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "fare_rm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fare Rm"
+          },
+          "booking_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Url"
+          },
+          "next_day": {
+            "type": "boolean",
+            "title": "Next Day",
+            "default": false
+          },
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/GroundedTrain"
+            },
+            "type": "array",
+            "title": "Alternatives"
+          }
+        },
+        "type": "object",
+        "title": "GroundedTrain"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Journey": {
+        "properties": {
+          "origin": {
+            "type": "string",
+            "title": "Origin"
+          },
+          "destination": {
+            "type": "string",
+            "title": "Destination"
+          },
+          "origin_station": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Station"
+          },
+          "dest_station": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dest Station"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/JourneyOption"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "ktmb_segment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KtmbSegment"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "travel_modes": {
+            "items": {
+              "$ref": "#/components/schemas/TravelModeOption"
+            },
+            "type": "array",
+            "title": "Travel Modes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "origin",
+          "destination"
+        ],
+        "title": "Journey"
+      },
+      "JourneyLeg": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "from_name": {
+            "type": "string",
+            "title": "From Name"
+          },
+          "to_name": {
+            "type": "string",
+            "title": "To Name"
+          },
+          "depart": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depart"
+          },
+          "arrive": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrive"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "distance_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance M"
+          },
+          "instruction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instruction"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          },
+          "headsign": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Headsign"
+          },
+          "service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service"
+          },
+          "train_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train No"
+          },
+          "fare_rm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fare Rm"
+          },
+          "booking_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Url"
+          },
+          "approximate": {
+            "type": "boolean",
+            "title": "Approximate",
+            "default": false
+          },
+          "polyline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Polyline"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "source",
+          "from_name",
+          "to_name"
+        ],
+        "title": "JourneyLeg"
+      },
+      "JourneyOption": {
+        "properties": {
+          "depart": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depart"
+          },
+          "arrive": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrive"
+          },
+          "total_duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Duration"
+          },
+          "total_distance_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Distance M"
+          },
+          "transfers": {
+            "type": "integer",
+            "title": "Transfers",
+            "default": 0
+          },
+          "fare_rm": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fare Rm"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "MYR"
+          },
+          "legs": {
+            "items": {
+              "$ref": "#/components/schemas/JourneyLeg"
+            },
+            "type": "array",
+            "title": "Legs"
+          },
+          "booking_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Booking Url"
+          },
+          "maps_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maps Url"
+          }
+        },
+        "type": "object",
+        "title": "JourneyOption"
+      },
+      "KTMBAudioAnalysisResponse": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Filename",
+            "description": "Original filename supplied by the caller.",
+            "examples": [
+              "ktmb-customer-call.mp3"
+            ]
+          },
+          "transcript": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Transcript",
+            "description": "Transcript generated from the uploaded audio file.",
+            "examples": [
+              "Customer: What ticket types are available? Agent: We currently offer..."
+            ]
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/KTMBConversationAnalysis"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "filename",
+          "transcript",
+          "analysis"
+        ],
+        "title": "KTMBAudioAnalysisResponse",
+        "description": "Response returned after an audio file is transcribed and analysed."
+      },
+      "KTMBAudioErrorResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Detail",
+            "description": "Human-readable explanation of the error.",
+            "examples": [
+              "Only supported audio files may be uploaded."
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "KTMBAudioErrorResponse",
+        "description": "Standard error body for documented endpoint responses."
+      },
+      "KTMBConversationAnalysis": {
+        "properties": {
+          "conversation_intent": {
+            "type": "string",
+            "maxLength": 250,
+            "minLength": 1,
+            "title": "Conversation Intent",
+            "description": "A short description of the main reason the customer contacted KTMB.",
+            "examples": [
+              "The customer asked about the available ticket types."
+            ]
+          },
+          "satisfaction_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Satisfaction Score",
+            "description": "AI-estimated customer satisfaction score from 0 to 100, based only on the conversation transcript.",
+            "examples": [
+              78
+            ]
+          },
+          "possible_improvement": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Possible Improvement",
+            "description": "One short and practical improvement for the KTMB customer-service response.",
+            "examples": [
+              "The agent should provide a clearer next step when the requested information is unavailable."
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "conversation_intent",
+          "satisfaction_score",
+          "possible_improvement"
+        ],
+        "title": "KTMBConversationAnalysis",
+        "description": "Structured AI analysis of the complete KTMB customer-service conversation."
+      },
+      "KtmbChatRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "trace_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content"
+        ],
+        "title": "KtmbChatRequest"
+      },
+      "KtmbChatResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "intent": {
+            "type": "string",
+            "title": "Intent"
+          },
+          "debug_steps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Debug Steps"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "retrieved_docs": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved Docs"
+          },
+          "official_timetable": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OfficialTimetable"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mcp_trace": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/McpTrace"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "journey": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Journey"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "outstanding_issue": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OutstandingIssue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "crm_escalation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CrmEscalation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "can_escalate": {
+            "type": "boolean",
+            "title": "Can Escalate",
+            "default": false
+          },
+          "quick_replies": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Quick Replies"
+          },
+          "delays": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ServiceDelays"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timetable": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Timetable"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content",
+          "intent",
+          "debug_steps"
+        ],
+        "title": "KtmbChatResponse"
+      },
+      "KtmbChatV2Request": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "dataset_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dataset Id"
+          },
+          "trace_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content",
+          "dataset_id"
+        ],
+        "title": "KtmbChatV2Request"
+      },
+      "KtmbMessageOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "role",
+          "content",
+          "created_at"
+        ],
+        "title": "KtmbMessageOut"
+      },
+      "KtmbSegment": {
+        "properties": {
+          "from_name": {
+            "type": "string",
+            "title": "From Name"
+          },
+          "to_name": {
+            "type": "string",
+            "title": "To Name"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "trains": {
+            "items": {
+              "$ref": "#/components/schemas/GroundedTrain"
+            },
+            "type": "array",
+            "title": "Trains"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "official_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Label"
+          },
+          "official_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from_name",
+          "to_name"
+        ],
+        "title": "KtmbSegment"
+      },
+      "KtmbSessionOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "KtmbSessionOut"
+      },
+      "ListDatasetsResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetListItem"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "total_datasets": {
+            "type": "integer",
+            "title": "Total Datasets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "data",
+          "total_datasets"
+        ],
+        "title": "ListDatasetsResponse"
+      },
+      "McpToolCall": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "args": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Args"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "McpToolCall"
+      },
+      "McpTrace": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "router": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Router"
+          },
+          "tools": {
+            "items": {
+              "$ref": "#/components/schemas/McpToolCall"
+            },
+            "type": "array",
+            "title": "Tools"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "title": "McpTrace"
+      },
+      "MetadataCondition": {
+        "properties": {
+          "logic": {
+            "type": "string",
+            "enum": [
+              "and",
+              "or"
+            ],
+            "title": "Logic",
+            "default": "and"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/MetadataConditionItem"
+            },
+            "type": "array",
+            "title": "Conditions"
+          }
+        },
+        "type": "object",
+        "title": "MetadataCondition"
+      },
+      "MetadataConditionItem": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "comparison_operator": {
+            "type": "string",
+            "enum": [
+              "contains",
+              "not contains",
+              "start with",
+              "empty",
+              "not empty",
+              "=",
+              "≠",
+              ">",
+              "<",
+              "≥",
+              "≤"
+            ],
+            "title": "Comparison Operator"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "comparison_operator"
+        ],
+        "title": "MetadataConditionItem"
+      },
+      "OfficialTimetable": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "url"
+        ],
+        "title": "OfficialTimetable"
+      },
+      "OutstandingIssue": {
+        "properties": {
+          "ticket_no": {
+            "type": "string",
+            "title": "Ticket No"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_update": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Update"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ticket_no",
+          "status"
+        ],
+        "title": "OutstandingIssue",
+        "description": "A found unresolved complaint/ticket (CRM — mock). Rendered as a card."
+      },
+      "ParseDocumentResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "ParseDocumentResponse"
+      },
+      "RetrieveChunksRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Question",
+            "description": "User query or retrieval keywords."
+          },
+          "dataset_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Dataset Ids",
+            "description": "Dataset IDs to search."
+          },
+          "document_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Document Ids",
+            "description": "Optional document IDs to restrict retrieval."
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page Size",
+            "default": 30
+          },
+          "similarity_threshold": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Similarity Threshold",
+            "default": 0.2
+          },
+          "vector_similarity_weight": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Vector Similarity Weight",
+            "default": 0.3
+          },
+          "knn_top_k": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Knn Top K",
+            "default": 10
+          },
+          "knn_num_candidates": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knn Num Candidates"
+          },
+          "rerank_candidates_count": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rerank Candidates Count",
+            "default": 64
+          },
+          "rerank_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rerank Id"
+          },
+          "keyword": {
+            "type": "boolean",
+            "title": "Keyword",
+            "default": false
+          },
+          "highlight": {
+            "type": "boolean",
+            "title": "Highlight",
+            "default": false
+          },
+          "cross_languages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cross Languages"
+          },
+          "metadata_condition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MetadataCondition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "use_kg": {
+            "type": "boolean",
+            "title": "Use Kg",
+            "default": false
+          },
+          "toc_enhance": {
+            "type": "boolean",
+            "title": "Toc Enhance",
+            "default": false
+          },
+          "include_knowledge_compilation": {
+            "type": "boolean",
+            "title": "Include Knowledge Compilation",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "dataset_ids"
+        ],
+        "title": "RetrieveChunksRequest"
+      },
+      "ServiceDelays": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available",
+            "default": true
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "delays": {
+            "items": {
+              "$ref": "#/components/schemas/DelayItem"
+            },
+            "type": "array",
+            "title": "Delays"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "ServiceDelays",
+        "description": "Sample service-delay snapshot (mock). Rendered as a card."
+      },
+      "SupervisorChatRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Content"
+          },
+          "dataset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Id"
+          },
+          "trace_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content"
+        ],
+        "title": "SupervisorChatRequest"
+      },
+      "SupervisorChatResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "tenant_id": {
+            "type": "string",
+            "title": "Tenant Id"
+          },
+          "debug_steps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Debug Steps"
+          },
+          "retrieved_docs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Retrieved Docs"
+          },
+          "used_tools": {
+            "type": "boolean",
+            "title": "Used Tools",
+            "default": false
+          },
+          "blocked": {
+            "type": "boolean",
+            "title": "Blocked",
+            "default": false
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "content",
+          "tenant_id"
+        ],
+        "title": "SupervisorChatResponse"
+      },
+      "Timetable": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "default": "OFFICIAL"
+          },
+          "from_station": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Station"
+          },
+          "to_station": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Station"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "schedule_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Label"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/TimetableRow"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "official_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Label"
+          },
+          "official_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Url"
+          }
+        },
+        "type": "object",
+        "title": "Timetable",
+        "description": "Full-day timetable from the bundled official KTMB PDFs. Rendered as a card."
+      },
+      "TimetableRow": {
+        "properties": {
+          "train_no": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Train No"
+          },
+          "service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service"
+          },
+          "depart": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Depart"
+          },
+          "arrive": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrive"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "day_offset": {
+            "type": "integer",
+            "title": "Day Offset",
+            "default": 0
+          },
+          "departed": {
+            "type": "boolean",
+            "title": "Departed",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "TimetableRow"
+      },
+      "TravelModeOption": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "distance_m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance M"
+          },
+          "fare": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fare"
+          },
+          "maps_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maps Url"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "default": "GOOGLE"
+          },
+          "approximate": {
+            "type": "boolean",
+            "title": "Approximate",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "title": "TravelModeOption",
+        "description": "EPIC-2: one entry of the 5-way travel-mode strip (Google summary — no fares)."
+      },
+      "UpdateDatasetRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "Updated dataset name."
+          },
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 65535
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 65535
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "embedding_model": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding Model",
+            "description": "Updated embedding model. RAGFlow requires chunk_count=0 before changing the embedding model."
+          },
+          "permission": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "me",
+                  "team"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission"
+          },
+          "chunk_method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "naive",
+                  "manual",
+                  "qa",
+                  "table",
+                  "paper",
+                  "book",
+                  "laws",
+                  "presentation",
+                  "picture",
+                  "one",
+                  "email"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Method"
+          },
+          "pagerank": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pagerank"
+          },
+          "parser_config": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parser Config"
+          }
+        },
+        "type": "object",
+        "title": "UpdateDatasetRequest",
+        "examples": [
+          {
+            "description": "Updated KTMB knowledge base description.",
+            "name": "Updated KTMB Knowledge Base"
+          }
+        ]
+      },
+      "UpdateDocumentActivationRequest": {
+        "properties": {
+          "enabled": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "title": "Enabled",
+            "description": "Document search availability. 1 = enabled, 0 = disabled.",
+            "examples": [
+              1
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "UpdateDocumentActivationRequest"
+      },
+      "UpdateDocumentActivationResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "update_date": {
+            "type": "string",
+            "title": "Update Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "document_id",
+          "status",
+          "update_date"
+        ],
+        "title": "UpdateDocumentActivationResponse"
+      },
+      "UpdateDocumentMetadataRequest": {
+        "properties": {
+          "meta_fields": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Meta Fields",
+            "description": "Complete metadata state for the document. Existing metadata in RAGFlow will be replaced, so callers should include all metadata fields that must be preserved.",
+            "examples": [
+              {
+                "category": "term-and-condition",
+                "uploaded_by": "55-666-7777"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "meta_fields"
+        ],
+        "title": "UpdateDocumentMetadataRequest"
+      },
+      "UpdateDocumentMetadataResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          },
+          "document_id": {
+            "type": "string",
+            "title": "Document Id"
+          },
+          "meta_fields": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Meta Fields"
+          },
+          "update_date": {
+            "type": "string",
+            "title": "Update Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "document_id",
+          "meta_fields",
+          "update_date"
+        ],
+        "title": "UpdateDocumentMetadataResponse"
+      },
+      "UpdateDocumentParserConfigRequest": {
+        "properties": {
+          "chunk_method": {
+            "type": "string",
+            "enum": [
+              "naive",
+              "manual",
+              "qa",
+              "table",
+              "paper",
+              "book",
+              "laws",
+              "presentation",
+              "picture",
+              "one",
+              "email"
+            ],
+            "title": "Chunk Method",
+            "examples": [
+              "naive"
+            ]
+          },
+          "parser_config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parser Config",
+            "examples": [
+              {
+                "auto_keywords": 5,
+                "auto_questions": 3,
+                "chunk_token_num": 700,
+                "delimiter": "\n",
+                "raptor": {
+                  "use_raptor": false
+                }
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "chunk_method"
+        ],
+        "title": "UpdateDocumentParserConfigRequest"
+      },
+      "UpdateDocumentParserConfigResponse": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "title": "Code"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DocumentParserConfigData"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "data"
+        ],
+        "title": "UpdateDocumentParserConfigResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

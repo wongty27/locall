@@ -1,71 +1,42 @@
-# locall README
+# Locall
 
-This is the README for your extension "locall". After writing up a brief description, we recommend including the following sections.
+A fully local API client for VS Code, with no account or sign-in. Locall lists the APIs in your Swagger and OpenAPI files, finds the ones running on your machine, and lets you send requests to them.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Multiple projects**: finds every `api.json`, `swagger.json` and `openapi.json` in your workspace, including multi-root workspaces. You can also add spec files from anywhere with **Add Spec File**.
+- **Collections**: endpoints are grouped by their OpenAPI tag. Untagged endpoints go under "Default".
+- **Localhost detection**: checks common ports for running APIs and their specs, and marks matching projects as live.
+- **Request builder**: parameters, headers, body and auth (bearer, basic, API key), pre-filled from the spec.
+- **Environments per project**: each project has its own environments and active environment. Use `{{variables}}` in any request field, with secrets kept in VS Code's secret storage.
+- **Response viewer, history and search**: see status, time, size, body and headers. Reopen past requests, copy any request as cURL, and search endpoints across projects.
 
-For example if there is an image subfolder under your extension project workspace:
+Swagger 2.0 and OpenAPI 3.x JSON files are supported. YAML and multipart file uploads aren't supported yet.
 
-\!\[feature X\]\(images/feature-x.png\)
+## Settings
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+| Setting | Default | Description |
+|---|---|---|
+| `locall.detection.enabled` | `true` | Look for running APIs on localhost. |
+| `locall.detection.ports` | 3000, 3001, 4000, 5000, 5173, 8000, 8080, 8081, 8888, 9000 | Ports to check. |
 
-## Requirements
+## Where your data goes
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Locall has no backend or telemetry. It only sends requests you send yourself, plus detection checks to loopback addresses (`GET` requests to common spec paths, such as `/openapi.json`, on the ports above).
 
-## Extension Settings
+| Data | Location |
+|---|---|
+| Environments and saved requests | `.locall/` in your first workspace folder, which you can commit |
+| History | VS Code's extension storage, never in your project |
+| Secret variables and saved auth values | VS Code's secret storage |
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Locall removes auth values and values of common secret fields, such as `Authorization` or `api_key`, before saving requests or history. **Request bodies are saved as written**, so use a `{{variable}}` for any secret in a body.
 
-For example:
+## Development
 
-This extension contributes the following settings:
+```bash
+pnpm install
+pnpm test
+```
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Press **F5** in VS Code to run the extension.

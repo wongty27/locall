@@ -1,12 +1,13 @@
 {
   "name": "locall",
-  "displayName": "locall",
+  "displayName": "Locall",
   "description": "Fully local API management tool without signin.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.144.0"
   },
   "categories": [
+    "Testing",
     "Other"
   ],
   "activationEvents": [],
@@ -24,18 +25,232 @@
     "views": {
       "locall": [
         {
-          "id": "locallView",
-          "name": "Locall",
+          "id": "locallProjects",
+          "name": "Projects",
           "icon": "resources/icon.svg"
+        },
+        {
+          "id": "locallLocalhost",
+          "name": "Localhost",
+          "icon": "resources/icon.svg"
+        },
+        {
+          "id": "locallHistory",
+          "name": "History",
+          "icon": "resources/icon.svg",
+          "visibility": "collapsed"
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "locallProjects",
+        "contents": "No API specs found.\nLocall looks for api.json, swagger.json and openapi.json in your workspace.\n[Add Spec File](command:locall.addSpecFile)\n[New Request](command:locall.newRequest)"
+      },
+      {
+        "view": "locallLocalhost",
+        "contents": "No running APIs found on the configured ports.\n[Scan Again](command:locall.refreshLocalhost)",
+        "when": "config.locall.detection.enabled"
+      },
+      {
+        "view": "locallLocalhost",
+        "contents": "Localhost detection is turned off in settings.",
+        "when": "!config.locall.detection.enabled"
+      },
+      {
+        "view": "locallHistory",
+        "contents": "Requests you send will appear here."
+      }
+    ],
     "commands": [
       {
-        "command": "locall.helloWorld",
-        "title": "Hello World"
+        "command": "locall.addSpecFile",
+        "title": "Add Spec File",
+        "category": "Locall",
+        "icon": "$(add)"
+      },
+      {
+        "command": "locall.refreshProjects",
+        "title": "Refresh Projects",
+        "category": "Locall",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "locall.removeProject",
+        "title": "Remove Project",
+        "category": "Locall",
+        "icon": "$(close)"
+      },
+      {
+        "command": "locall.openProject",
+        "title": "Open Project",
+        "category": "Locall"
+      },
+      {
+        "command": "locall.openEndpoint",
+        "title": "Open Endpoint",
+        "category": "Locall"
+      },
+      {
+        "command": "locall.searchEndpoints",
+        "title": "Search Endpoints",
+        "category": "Locall",
+        "icon": "$(search)"
+      },
+      {
+        "command": "locall.newRequest",
+        "title": "New Request",
+        "category": "Locall",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "locall.manageEnvironments",
+        "title": "Manage Environments",
+        "category": "Locall",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "locall.refreshLocalhost",
+        "title": "Scan Localhost",
+        "category": "Locall",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "locall.addDetected",
+        "title": "Add as Project",
+        "category": "Locall",
+        "icon": "$(add)"
+      },
+      {
+        "command": "locall.openBlankRequest",
+        "title": "Open Request",
+        "category": "Locall"
+      },
+      {
+        "command": "locall.openHistory",
+        "title": "Open History Entry",
+        "category": "Locall"
+      },
+      {
+        "command": "locall.clearHistory",
+        "title": "Clear History",
+        "category": "Locall",
+        "icon": "$(clear-all)"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "locall.removeProject",
+          "when": "false"
+        },
+        {
+          "command": "locall.openProject",
+          "when": "false"
+        },
+        {
+          "command": "locall.openEndpoint",
+          "when": "false"
+        },
+        {
+          "command": "locall.addDetected",
+          "when": "false"
+        },
+        {
+          "command": "locall.openBlankRequest",
+          "when": "false"
+        },
+        {
+          "command": "locall.openHistory",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "locall.searchEndpoints",
+          "when": "view == locallProjects",
+          "group": "navigation@1"
+        },
+        {
+          "command": "locall.newRequest",
+          "when": "view == locallProjects",
+          "group": "navigation@2"
+        },
+        {
+          "command": "locall.addSpecFile",
+          "when": "view == locallProjects",
+          "group": "navigation@3"
+        },
+        {
+          "command": "locall.refreshProjects",
+          "when": "view == locallProjects",
+          "group": "navigation@4"
+        },
+        {
+          "command": "locall.manageEnvironments",
+          "when": "view == locallProjects",
+          "group": "navigation@5"
+        },
+        {
+          "command": "locall.refreshLocalhost",
+          "when": "view == locallLocalhost",
+          "group": "navigation"
+        },
+        {
+          "command": "locall.clearHistory",
+          "when": "view == locallHistory",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "locall.removeProject",
+          "when": "view == locallProjects && viewItem == project.removable",
+          "group": "inline"
+        },
+        {
+          "command": "locall.addDetected",
+          "when": "view == locallLocalhost && viewItem == server.spec",
+          "group": "inline"
+        },
+        {
+          "command": "locall.manageEnvironments",
+          "when": "view == locallProjects && viewItem =~ /^project/",
+          "group": "inline@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Locall",
+      "properties": {
+        "locall.detection.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Look for running APIs on localhost."
+        },
+        "locall.detection.ports": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          },
+          "default": [
+            3000,
+            3001,
+            4000,
+            5000,
+            5173,
+            8000,
+            8080,
+            8081,
+            8888,
+            9000
+          ],
+          "description": "Loopback ports to check for running APIs."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
@@ -47,24 +262,28 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
-    "check-types": "tsc --noEmit",
+    "check-types": "tsc --noEmit && tsc --noEmit -p tsconfig.webview.json",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "watch:tsc-webview": "tsc --noEmit --watch --project tsconfig.webview.json"
   },
   "devDependencies": {
-    "@types/vscode": "^1.144.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "24.x",
-    "typescript-eslint": "^8.61.1",
-    "eslint": "^10.5.0",
+    "@types/vscode": "^1.144.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
     "esbuild": "^0.28.1",
+    "eslint": "^10.5.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^6.0.3",
-    "@vscode/test-cli": "^0.0.15",
-    "@vscode/test-electron": "^3.0.0"
+    "typescript-eslint": "^8.61.1"
   },
   "overrides": {
     "diff": "^8.0.4",
     "serialize-javascript": "^7.0.6"
+  },
+  "dependencies": {
+    "preact": "^11.1.0"
   }
 }

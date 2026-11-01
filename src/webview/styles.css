@@ -1,0 +1,650 @@
+:root {
+  --get: var(--vscode-charts-green, #388a34);
+  --post: var(--vscode-charts-yellow, #bf8803);
+  --put: var(--vscode-charts-blue, #1a85ff);
+  --patch: var(--vscode-charts-purple, #652d90);
+  --delete: var(--vscode-charts-red, #e51400);
+  --muted: var(--vscode-descriptionForeground);
+  --border: var(--vscode-panel-border, var(--vscode-widget-border, transparent));
+  --radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+}
+
+h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 1.6em;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.15em;
+  font-weight: 600;
+}
+
+h3 {
+  margin: 16px 0 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+h3:first-child {
+  margin-top: 0;
+}
+
+code,
+.mono {
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: var(--vscode-editor-font-size, 12px);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.pre-line {
+  white-space: pre-line;
+}
+
+.loading,
+.empty {
+  padding: 32px 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Controls */
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 26px;
+  padding: 3px 6px;
+  color: var(--vscode-input-foreground);
+  background: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border, var(--border));
+  border-radius: var(--radius);
+  font: inherit;
+}
+
+select {
+  color: var(--vscode-dropdown-foreground);
+  background: var(--vscode-dropdown-background);
+  border-color: var(--vscode-dropdown-border, var(--border));
+}
+
+input[type="checkbox"] {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  accent-color: var(--vscode-button-background);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+
+input.mono,
+textarea.mono {
+  font-family: var(--vscode-editor-font-family, monospace);
+  font-size: var(--vscode-editor-font-size, 12px);
+}
+
+:focus-visible {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+button {
+  min-height: 26px;
+  padding: 3px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.primary {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+  border-color: var(--vscode-button-border, transparent);
+}
+
+.primary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.secondary {
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+  border-color: var(--vscode-button-border, transparent);
+}
+
+.secondary:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.ghost {
+  padding: 2px 8px;
+  color: var(--vscode-textLink-foreground);
+  background: transparent;
+}
+
+.ghost:hover {
+  background: var(--vscode-toolbar-hoverBackground);
+}
+
+.ghost.icon {
+  padding: 0 6px;
+  color: var(--muted);
+  font-size: 1.2em;
+}
+
+.chip {
+  padding: 1px 7px;
+  color: var(--vscode-badge-foreground);
+  background: var(--vscode-badge-background);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.chip.live {
+  color: var(--get);
+  background: transparent;
+  border: 1px solid var(--get);
+}
+
+.chip.warn {
+  color: var(--vscode-editorWarning-foreground);
+  background: transparent;
+  border: 1px solid var(--vscode-editorWarning-foreground);
+}
+
+.hint {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.error-box {
+  margin: 12px;
+  padding: 8px 12px;
+  color: var(--vscode-inputValidation-errorForeground, var(--vscode-foreground));
+  background: var(--vscode-inputValidation-errorBackground, transparent);
+  border: 1px solid var(--vscode-inputValidation-errorBorder, var(--delete));
+  border-radius: var(--radius);
+  overflow-wrap: anywhere;
+}
+
+/* Request page */
+.request-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 460px;
+  padding: 12px 16px 0;
+}
+
+.request-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.env-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.env-picker select {
+  width: 140px;
+}
+
+.url-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.url-input {
+  flex: 1 1 240px;
+  width: auto;
+}
+
+.method-select {
+  flex: 0 0 96px;
+  width: 96px;
+  font-weight: 700;
+}
+
+.method-select.get,
+.get .method-badge {
+  color: var(--get);
+}
+
+.method-select.post,
+.post .method-badge {
+  color: var(--post);
+}
+
+.method-select.put,
+.put .method-badge {
+  color: var(--put);
+}
+
+.method-select.patch,
+.patch .method-badge {
+  color: var(--patch);
+}
+
+.method-select.delete,
+.delete .method-badge {
+  color: var(--delete);
+}
+
+.split {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin-top: 4px;
+}
+
+.pane {
+  position: relative;
+  display: flex;
+  flex: 1 1 50%;
+  flex-direction: column;
+  min-height: 180px;
+}
+
+.response {
+  border-top: 1px solid var(--border);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.tab {
+  padding: 6px 10px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+
+.tab:hover {
+  color: var(--vscode-foreground);
+}
+
+.tab.active {
+  color: var(--vscode-panelTitle-activeForeground, var(--vscode-foreground));
+  border-bottom-color: var(--vscode-panelTitle-activeBorder, var(--vscode-focusBorder));
+}
+
+.tab-body {
+  flex: 1;
+  min-height: 0;
+  padding: 10px 2px;
+  overflow: auto;
+}
+
+.pane-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.kv {
+  width: 100%;
+  margin-bottom: 6px;
+  border-collapse: collapse;
+}
+
+.kv th {
+  padding: 2px 4px;
+  color: var(--muted);
+  font-size: 0.85em;
+  font-weight: 400;
+  text-align: left;
+}
+
+.kv td {
+  padding: 2px 4px;
+  vertical-align: middle;
+}
+
+.kv .narrow {
+  width: 44px;
+}
+
+.kv .center {
+  width: 44px;
+  text-align: center;
+}
+
+.kv tr.disabled input:not([type="checkbox"]) {
+  opacity: 0.55;
+}
+
+.fixed-key {
+  display: inline-block;
+  padding: 3px 0;
+}
+
+.required {
+  margin-left: 6px;
+  color: var(--vscode-editorWarning-foreground);
+  font-family: var(--vscode-font-family);
+  font-size: 0.8em;
+}
+
+.form {
+  display: grid;
+  gap: 10px;
+  max-width: 420px;
+}
+
+.form label,
+.body-editor label {
+  display: grid;
+  gap: 3px;
+  color: var(--muted);
+}
+
+.form p {
+  margin: 0;
+}
+
+.body-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.body-editor .inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.body-editor textarea {
+  flex: 1;
+  min-height: 110px;
+  resize: vertical;
+  tab-size: 2;
+}
+
+.docs p {
+  margin: 0 0 8px;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.doc-table td {
+  padding: 4px 12px 4px 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.break {
+  overflow-wrap: anywhere;
+}
+
+.s2 {
+  --status: var(--get);
+}
+
+.s3 {
+  --status: var(--put);
+}
+
+.s4 {
+  --status: var(--post);
+}
+
+.s5 {
+  --status: var(--delete);
+}
+
+.status-text {
+  color: var(--status, var(--vscode-foreground));
+}
+
+.status-pill {
+  color: var(--status, var(--vscode-foreground));
+  font-weight: 600;
+}
+
+.response-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.response-body {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.progress {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--vscode-progressBar-background);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress {
+    animation: none;
+  }
+}
+
+/* Overview and environments */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.overview-header p {
+  margin: 0;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.facts .wide {
+  grid-column: 1 / -1;
+}
+
+.env-button {
+  margin-bottom: 12px;
+}
+
+.filter {
+  margin-bottom: 20px;
+}
+
+.collection {
+  margin-bottom: 24px;
+}
+
+.count {
+  margin-left: 8px;
+  color: var(--muted);
+  font-size: 0.85em;
+  font-weight: 400;
+}
+
+.endpoint-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.endpoint-list li + li {
+  border-top: 1px solid var(--border);
+}
+
+.endpoint-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 10px;
+  color: var(--vscode-foreground);
+  background: transparent;
+  border: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.endpoint-row:hover {
+  background: var(--vscode-list-hoverBackground);
+}
+
+.method-badge {
+  flex: 0 0 56px;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.path {
+  overflow-wrap: anywhere;
+}
+
+.path.deprecated {
+  text-decoration: line-through;
+}
+
+.summary {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+
+.env-card {
+  margin: 16px 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.env-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.env-title input {
+  flex: 1;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+@media (max-width: 520px) {
+  .summary {
+    display: none;
+  }
+
+  .method-select {
+    flex: 1 1 auto;
+  }
+}

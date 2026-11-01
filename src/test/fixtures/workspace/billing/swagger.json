@@ -1,0 +1,34 @@
+{
+  "swagger": "2.0",
+  "info": { "title": "Billing API", "version": "2.0.0" },
+  "host": "localhost:8080",
+  "basePath": "/v1",
+  "schemes": ["http"],
+  "securityDefinitions": { "key": { "type": "apiKey", "name": "X-API-Key", "in": "header" } },
+  "paths": {
+    "/invoices": {
+      "post": {
+        "tags": ["Invoices"],
+        "summary": "Create an invoice",
+        "security": [{ "key": [] }],
+        "consumes": ["application/json"],
+        "parameters": [
+          { "name": "body", "in": "body", "required": true, "schema": { "$ref": "#/definitions/Invoice" } },
+          { "name": "dryRun", "in": "query", "type": "boolean", "default": false }
+        ],
+        "responses": { "201": { "description": "Created" } }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "consumes": ["application/x-www-form-urlencoded"],
+        "parameters": [{ "name": "user", "in": "formData", "type": "string", "default": "demo" }],
+        "responses": { "200": { "description": "OK" } }
+      }
+    }
+  },
+  "definitions": {
+    "Invoice": { "type": "object", "properties": { "amount": { "type": "number" } } }
+  }
+}
